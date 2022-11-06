@@ -1,23 +1,25 @@
 import random
 import time
+from collections import deque
 
-regular_snowflake = '\u2744'
-tight_snowflake = '\u2745'
-heavy_snowflake = '\u2746'
+weather = [' ', 
+    '\u2744', 
+    '\u2745', 
+    '\u2746']
 
-historical_output = []
-padding = -1
-UP = '\033[F'
-
-weather = [' ', regular_snowflake, tight_snowflake, heavy_snowflake]
-
+terminal_height = 10
+empty = [ '' for _ in range(terminal_height)]
+historical_output = deque(empty, 
+        maxlen=terminal_height)
+        
 while True:
-    next_line = random.choices(weather, weights=[0.96, 0.025, 0.01, 0.005], k=120)
+    next_line = random.choices(weather, 
+        weights=[0.96, 0.025, 0.01, 0.005],
+        k=120)
 
-    historical_output.insert(0, ''.join(next_line))
-    if len(historical_output) > 20:
-        historical_output.pop()
+    historical_output.appendleft(''.join(next_line))
+ 
+    for line in historical_output:
+        print(line)
 
-    print(UP * 20)
-    print(*historical_output)
-    time.sleep(0.1)
+    time.sleep(0.2)
